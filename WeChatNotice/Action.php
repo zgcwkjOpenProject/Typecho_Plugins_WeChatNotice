@@ -99,7 +99,7 @@ class WeChatNotice_Action extends Typecho_Widget
             echo "内置参数不能为空";
             return;
         }
-        $apiToken = isset($_GET['apiToken']) ? $_GET['apiToken'] : isset($_POST['apiToken']) ? $_POST['apiToken'] : '';
+        $apiToken = isset($_GET['apiToken']) ? $_GET['apiToken'] : (isset($_POST['apiToken']) ? $_POST['apiToken'] : '');
         if (!$apiToken) {
             echo "Not Null";
             return;
@@ -120,10 +120,10 @@ class WeChatNotice_Action extends Typecho_Widget
         //标题：{{title.DATA}}
         //内容：
         //{{content.DATA}}
-        $title = isset($_GET['title']) ? $_GET['title'] : isset($_POST['title']) ? $_POST['title'] : '';
-        $content = isset($_GET['content']) ? $_GET['content'] : isset($_POST['content']) ? $_POST['content'] : '';
-        $openID = isset($_GET['openID']) ? $_GET['openID'] : isset($_POST['openID']) ? $_POST['openID'] : '';
-        $openUrl = isset($_GET['openUrl']) ? $_GET['openUrl'] : isset($_POST['openUrl']) ? $_POST['openUrl'] : 'blog.zgcwkj.cn';
+        $title = isset($_GET['title']) ? $_GET['title'] : (isset($_POST['title']) ? $_POST['title'] : '');
+        $content = isset($_GET['content']) ? $_GET['content'] : (isset($_POST['content']) ? $_POST['content'] : '');
+        $openID = isset($_GET['openID']) ? $_GET['openID'] : (isset($_POST['openID']) ? $_POST['openID'] : '');
+        $openUrl = isset($_GET['openUrl']) ? $_GET['openUrl'] : (isset($_POST['openUrl']) ? $_POST['openUrl'] : 'blog.zgcwkj.cn');
         if(!$openID){
             $openID = $openid;
         }
@@ -172,7 +172,7 @@ class WeChatNotice_Action extends Typecho_Widget
             echo "内置参数不能为空";
             return;
         }
-        $apiToken = isset($_GET['apiToken']) ? $_GET['apiToken'] : isset($_POST['apiToken']) ? $_POST['apiToken'] : '';
+        $apiToken = isset($_GET['apiToken']) ? $_GET['apiToken'] : (isset($_POST['apiToken']) ? $_POST['apiToken'] : '');
         if (!$apiToken) {
             echo "Not Null";
             return;
@@ -193,10 +193,10 @@ class WeChatNotice_Action extends Typecho_Widget
         //标题：{{title.DATA}}
         //内容：
         //{{content.DATA}}
-        $title = isset($_GET['t']) ? $_GET['t'] : isset($_POST['t']) ? $_POST['t'] : '';
-        $content = isset($_GET['c']) ? $_GET['c'] : isset($_POST['c']) ? $_POST['c'] : '';
-        $openID = isset($_GET['o']) ? $_GET['o'] : isset($_POST['o']) ? $_POST['o'] : '';
-        $openUrl = isset($_GET['u']) ? $_GET['u'] : isset($_POST['u']) ? $_POST['u'] : 'blog.zgcwkj.cn';
+        $title = isset($_GET['t']) ? $_GET['t'] : (isset($_POST['t']) ? $_POST['t'] : '');
+        $content = isset($_GET['c']) ? $_GET['c'] : (isset($_POST['c']) ? $_POST['c'] : '');
+        $openID = isset($_GET['o']) ? $_GET['o'] : (isset($_POST['o']) ? $_POST['o'] : '');
+        $openUrl = isset($_GET['u']) ? $_GET['u'] : (isset($_POST['u']) ? $_POST['u'] : 'blog.zgcwkj.cn');
         if(!$openID){
             $openID = $openid;
         }
