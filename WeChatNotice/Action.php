@@ -21,6 +21,7 @@ class WeChatNotice_Action extends Typecho_Widget
         $options = Helper::options();
         //读取配置文件的 ConfigSwitch 信息
         $ConfigSwitch = $options->plugin('WeChatNotice')->ConfigSwitch;
+        
         if ($ConfigSwitch) {
             //读取配置文件的 Token 信息
             $Token = $options->plugin('WeChatNotice')->Token;
@@ -74,7 +75,11 @@ class WeChatNotice_Action extends Typecho_Widget
             echo "<FromUserName><![CDATA[" . $toUsername . "]]></FromUserName>\n";
             echo "<CreateTime><![CDATA[" . time() . "]]></CreateTime>\n";
             echo "<MsgType><![CDATA[" . $mType . "]]></MsgType>\n";
-            echo "<Content><![CDATA[" . $message . $content . "]]></Content>\n";
+            if ($content == 'id') {
+                echo "<Content><![CDATA[" . $fromUsername . "]]></Content>\n";
+            } else {
+                echo "<Content><![CDATA[" . $message . $content . "]]></Content>\n";
+            }
             echo "</xml>\n";
         }
     }
@@ -118,8 +123,7 @@ class WeChatNotice_Action extends Typecho_Widget
         $api_server_template_id = $options->plugin('WeChatNotice')->api_server_template_id;
         //标题：消息推送
         //标题：{{title.DATA}}
-        //内容：
-        //{{content.DATA}}
+        //内容：{{content.DATA}}
         $title = isset($_GET['title']) ? $_GET['title'] : (isset($_POST['title']) ? $_POST['title'] : '');
         $content = isset($_GET['content']) ? $_GET['content'] : (isset($_POST['content']) ? $_POST['content'] : '');
         $openID = isset($_GET['openID']) ? $_GET['openID'] : (isset($_POST['openID']) ? $_POST['openID'] : '');
@@ -128,8 +132,8 @@ class WeChatNotice_Action extends Typecho_Widget
             $openID = $openid;
         }
         $data = array(
-            'touser' => $openID, //要发送给用户的openid
-            'template_id' => $api_server_template_id, //改成自己的模板id，在微信后台模板消息里查看
+            'touser' => $openID, //用户openid
+            'template_id' => $api_server_template_id, //模板id
             'url' => $openUrl,
             'data' => array(
                 'title' => array(
@@ -146,7 +150,7 @@ class WeChatNotice_Action extends Typecho_Widget
         $res = WeChatNotice_Plugin::https_request($url, urldecode($jdata)); //请求开始
         $res = json_decode($res, true);
         $message = "失败";
-        if ($res['errcode'] == 0 && $res['errcode'] == "ok") {
+        if ($res['errcode'] == 0) {
             $message = "成功";
         }
         echo $message;
@@ -191,8 +195,7 @@ class WeChatNotice_Action extends Typecho_Widget
         $api_server_template_id = $options->plugin('WeChatNotice')->api_server_template_id;
         //标题：消息推送
         //标题：{{title.DATA}}
-        //内容：
-        //{{content.DATA}}
+        //内容：{{content.DATA}}
         $title = isset($_GET['t']) ? $_GET['t'] : (isset($_POST['t']) ? $_POST['t'] : '');
         $content = isset($_GET['c']) ? $_GET['c'] : (isset($_POST['c']) ? $_POST['c'] : '');
         $openID = isset($_GET['o']) ? $_GET['o'] : (isset($_POST['o']) ? $_POST['o'] : '');
@@ -201,8 +204,8 @@ class WeChatNotice_Action extends Typecho_Widget
             $openID = $openid;
         }
         $data = array(
-            'touser' => $openID, //要发送给用户的openid
-            'template_id' => $api_server_template_id, //改成自己的模板id，在微信后台模板消息里查看
+            'touser' => $openID, //用户openid
+            'template_id' => $api_server_template_id, //模板id
             'url' => $openUrl,
             'data' => array(
                 'title' => array(
@@ -219,7 +222,7 @@ class WeChatNotice_Action extends Typecho_Widget
         $res = WeChatNotice_Plugin::https_request($url, urldecode($jdata)); //请求开始
         $res = json_decode($res, true);
         $message = "失败";
-        if ($res['errcode'] == 0 && $res['errcode'] == "ok") {
+        if ($res['errcode'] == 0) {
             $message = "成功";
         }
         echo $message;

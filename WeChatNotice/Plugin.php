@@ -6,7 +6,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
  * 
  * @package WeChatNotice
  * @author zgcwkj
- * @version 1.0.1
+ * @version 1.0.2
  * @link http://blog.zgcwkj.cn
  */
 class WeChatNotice_Plugin implements Typecho_Plugin_Interface
@@ -20,15 +20,15 @@ class WeChatNotice_Plugin implements Typecho_Plugin_Interface
      */
     public static function activate()
     {
-        // 创建路由
+        //创建路由
         Helper::addRoute('_WeChat', '/WeChat', 'WeChatNotice_Action', 'service');
         Helper::addRoute('_WeChatNoticeApi', '/WeChatNoticeApi', 'WeChatNotice_Action', 'noticeService');
         Helper::addRoute('_WeChatNoticeSimpleApi', '/wxn', 'WeChatNotice_Action', 'noticeSimpleService');
-        //监听收发信息
+        //监听事件
         Typecho_Plugin::factory('Widget_Feedback')->comment = array('WeChatNotice_Plugin', 'pushMessage');
         Typecho_Plugin::factory('Widget_Feedback')->trackback = array('WeChatNotice_Plugin', 'pushMessage');
         Typecho_Plugin::factory('Widget_XmlRpc')->pingback = array('WeChatNotice_Plugin', 'pushMessage');
-
+        //返回
         return _t('请进入设置填写微信推送参数');
     }
 
@@ -56,32 +56,40 @@ class WeChatNotice_Plugin implements Typecho_Plugin_Interface
      */
     public static function config(Typecho_Widget_Helper_Form $form)
     {
-        echo '<h4>作者：<a href="http://blog.zgcwkj.cn" target="_blank">zgcwkj</a> 2022年1月2日</h4>';
+        echo '<h4>作者：<a href="http://blog.zgcwkj.cn" target="_blank">zgcwkj</a> 2024年11月14日</h4>';
+        echo '<h4>源码：<a href="http://github.com/zgcwkjOpenProject/Typecho_Plugins_WeChatNotice" target="_blank">WeChatNotice</a></h4>';
         echo '<h4>微信公众号：<a href="https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login" target="_blank">申请测试</a></h4>';
         echo '<hr>';
         echo '<h2>评论通知配置说明</h2>';
-        echo '<b>伪静态：</b><span style="color:#FF0000;">你的网址/WeChat</span></br>';
-        echo '<b>通用接口：</b><span style="color:#FF0000;">你的网址/index.php/WeChat</span></br>';
-        echo '<b>消息模版标题：</b>';
-        echo '</br><textarea style="height:40px" id="WXN_TextTile" readonly></textarea></br>';
+        echo '<b>服务接口：</b><span style="color:red;">网站/index.php/WeChat</span></br>';
+        echo '<b>伪静态说明：</b><span>去除 /index.php</span></br>';
+        echo '<b>消息模版标题：</b></br>';
+        echo '<textarea style="height:40px" id="WXN_TextTile" readonly></textarea></br>';
         echo '<script>document.getElementById("WXN_TextTile").value="文章评论"</script>';
-        echo '<b>消息模版内容：</b>';
-        echo '</br><textarea style="height:130px" id="WXN_TextContent" readonly></textarea></br>';
-        echo '<script>document.getElementById("WXN_TextContent").value="文章：{{title.DATA}}\r\n用户：{{user.DATA}}\r\n位置：{{ip.DATA}}\r\n内容：\r\n{{content.DATA}}"</script>';
+        echo '<b>消息模版内容：</b></br>';
+        echo '<textarea style="height:120px" id="WXN_TextContent" readonly></textarea></br>';
+        echo '<script>document.getElementById("WXN_TextContent").value="文章：{{title.DATA}}\r\n用户：{{user.DATA}}\r\n位置：{{ip.DATA}}\r\n内容：{{content.DATA}}"</script>';
         echo '<hr>';
         echo '<h2>外部接口配置说明</h2>';
-        echo '<b>通用接口：</b><span style="color:#FF0000;font-size:13px;">网址/index.php/WeChatNoticeApi?apiToken=token&title=TestA&content=TestB&openID=id&openUrl=zgcwkj.cn</span></br>';
-        echo '<b>伪静态接口：</b><span style="color:#FF0000;">网址/WeChatNoticeApi?apiToken=token&title=TestA&content=TestB&openID=id&openUrl=zgcwkj.cn</span></br>';
-        echo '<b>通用简易接口：</b><span style="color:#FF0000;">网址/index.php/wxn?apiToken=token&t=TestA&c=TestB&o=id&u=zgcwkj.cn</span></br>';
-        echo '<b>伪静态简易接口：</b><span style="color:#FF0000;">网址/wxn?apiToken=token&t=TestA&c=TestB&o=id&u=zgcwkj.cn</span></br>';
-        echo '<b>参数说明：</b><span style="color:#FF0000;">apiToken</span>凭据，<span style="color:#FF0000;">title</span> 标题，<span style="color:#FF0000;">content</span> 内容，<span style="color:#FF0000;">openID</span> 接收者ID，<span style="color:#FF0000;">openUrl</span> 打开的网址</br>';
-        echo '<b>消息模版标题：</b>';
-        echo '</br><textarea style="height:40px" id="WXN_ApiTile" readonly></textarea></br>';
+        echo '<b>通用接口：</b><span style="color:red;font-size:13px;">网站/index.php/WeChatNoticeApi?apiToken=token&title=TestA&content=TestB&openID=id&openUrl=zgcwkj.cn</span></br>';
+        echo '<b>简易接口：</b><span style="color:red;">网站/index.php/wxn?apiToken=token&t=TestA&c=TestB&o=id&u=zgcwkj.cn</span></br>';
+        echo '<b>伪静态说明：</b><span>去除 /index.php</span></br>';
+        echo '<b>参数说明：</b><span style="color:red;">apiToken</span>凭据，<span style="color:red;">title</span> 标题，<span style="color:red;">content</span> 内容，<span style="color:red;">openID</span> 接收者ID，<span style="color:red;">openUrl</span> 打开的网址</br>';
+        echo '<b>消息模版标题：</b></br>';
+        echo '<textarea style="height:40px" id="WXN_ApiTile" readonly></textarea></br>';
         echo '<script>document.getElementById("WXN_ApiTile").value="消息通知"</script>';
-        echo '<b>消息模版内容：</b>';
-        echo '</br><textarea style="height:80px" id="WXN_ApiContent" readonly></textarea></br>';
-        echo '<script>document.getElementById("WXN_ApiContent").value="标题：{{title.DATA}}\r\n内容：\r\n{{content.DATA}}"</script>';
+        echo '<b>消息模版内容：</b></br>';
+        echo '<textarea style="height:80px" id="WXN_ApiContent" readonly></textarea></br>';
+        echo '<script>document.getElementById("WXN_ApiContent").value="标题：{{title.DATA}}\r\n内容：{{content.DATA}}"</script>';
         echo '<hr>';
+        
+        //微信公众号 appID
+        $appID = new Typecho_Widget_Helper_Form_Element_Text('appID', null, null, _t('appID'), '微信公众号 appID');
+        $form->addInput($appID);
+        
+        //微信公众号 appsecret
+        $appsecret = new Typecho_Widget_Helper_Form_Element_Text('appsecret', null, null, _t('appsecret'), '微信公众号 appsecret');
+        $form->addInput($appsecret);
 
         //接口配置信息对接 开关
         $ConfigSwitch = new Typecho_Widget_Helper_Form_Element_Radio(
@@ -98,14 +106,6 @@ class WeChatNotice_Plugin implements Typecho_Plugin_Interface
         //用户发送消息时 默认回复的内容、留空则不回复
         $message = new Typecho_Widget_Helper_Form_Element_Text('message', null, '服务正常使用', _t('默认回复的内容'), '微信公众号 默认回复的内容、留空则不回复');
         $form->addInput($message);
-        
-        //微信公众号 appID
-        $appID = new Typecho_Widget_Helper_Form_Element_Text('appID', null, null, _t('appID'), '微信公众号 appID');
-        $form->addInput($appID);
-        
-        //微信公众号 appsecret
-        $appsecret = new Typecho_Widget_Helper_Form_Element_Text('appsecret', null, null, _t('appsecret'), '微信公众号 appsecret');
-        $form->addInput($appsecret);
         
         //评论通知 开关
         $template_state = new Typecho_Widget_Helper_Form_Element_Radio(
@@ -131,13 +131,13 @@ class WeChatNotice_Plugin implements Typecho_Plugin_Interface
             ), '0', '外部接口', '启用或禁用外部接口推送');
         $form->addInput($api_server_state);
         
-        //外部接口凭据 api_server_token
-        $api_server_token = new Typecho_Widget_Helper_Form_Element_Text('api_server_token', null, null, _t('外部接口凭据'), '外部接口凭据 api_server_token');
-        $form->addInput($api_server_token);
-        
         //消息模版 api_server_template_id
         $api_server_template_id = new Typecho_Widget_Helper_Form_Element_Text('api_server_template_id', null, null, _t('接口推送通知模板ID'), '模版ID api_server_template_id');
         $form->addInput($api_server_template_id);
+        
+        //外部接口凭据 api_server_token
+        $api_server_token = new Typecho_Widget_Helper_Form_Element_Text('api_server_token', null, null, _t('外部接口凭据'), '外部接口凭据 api_server_token');
+        $form->addInput($api_server_token);
     }
 
     /**
@@ -181,8 +181,8 @@ class WeChatNotice_Plugin implements Typecho_Plugin_Interface
             //内容：
             //{{content.DATA}}
             $data = array(
-                'touser' => $openid, //要发送给用户的openid
-                'template_id' => $template_id, //改成自己的模板id，在微信后台模板消息里查看
+                'touser' => $openid, //用户openid
+                'template_id' => $template_id, //模板id
                 'url' => $post->permalink, //自己网站链接url
                 'data' => array(
                     'title' => array(
@@ -207,7 +207,7 @@ class WeChatNotice_Plugin implements Typecho_Plugin_Interface
             $res = self::https_request($url, urldecode($jdata)); //请求开始
             $res = json_decode($res, true);
             $message = "失败";
-            if ($res['errcode'] == 0 && $res['errcode'] == "ok") {
+            if ($res['errcode'] == 0) {
                 $message = "成功";
             }
         }
@@ -252,7 +252,6 @@ class WeChatNotice_Plugin implements Typecho_Plugin_Interface
                 self::$arrayToken["access_token"] = $jdata->access_token;
                 self::$arrayToken["expires_in"] =  $jdata->expires_in;
                 self::$arrayToken["record_time"] =  time();
-    
                 //$token_file = fopen("_Test.txt","w") or die("Unable to open file!");
                 //fwrite($token_file, "文本输出达到调试效果");
                 //fclose($token_file);
