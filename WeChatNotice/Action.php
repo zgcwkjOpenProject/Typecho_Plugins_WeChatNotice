@@ -3,11 +3,6 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
 class WeChatNotice_Action extends Typecho_Widget
 {
-
-    public function action()
-    {
-    }
-
     /**
      * 插件服务
      * 
@@ -21,7 +16,6 @@ class WeChatNotice_Action extends Typecho_Widget
         $options = Helper::options();
         //读取配置文件的 ConfigSwitch 信息
         $ConfigSwitch = $options->plugin('WeChatNotice')->ConfigSwitch;
-        
         if ($ConfigSwitch) {
             //读取配置文件的 Token 信息
             $Token = $options->plugin('WeChatNotice')->Token;
