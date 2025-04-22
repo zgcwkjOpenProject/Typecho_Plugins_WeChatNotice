@@ -1,6 +1,6 @@
 # Typecho_Plugins_WeChatNotice
 
-Typecho 插件、微信公众号消息推送插件
+Typecho 插件：微信公众号消息推送插件
 <br />
 Blog：[zgcwkj](http://zgcwkj.cn)
 
